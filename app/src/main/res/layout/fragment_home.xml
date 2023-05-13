@@ -1,22 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/text_home"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/headline_item_first"
+                layout="@layout/headline_layout"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/semua_berita"
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:textStyle="bold"
+                android:layout_marginStart="14dp"
+                android:textColor="@color/main_color_mandiri"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_headline"
+                android:padding="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/list_headline_item" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/error_message"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_gravity="center"
+        android:text="@string/_404_error_problem"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#E91E63"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/btn_try"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_anchor="@id/error_message"
+        app:layout_anchorGravity="bottom|center"
+        android:paddingTop="30dp"
+        android:text="@string/coba_lagi"
+        style="@style/TextAppearance.AppCompat.Button"
+        android:textColor="#E91E63"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center_horizontal|center_vertical"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

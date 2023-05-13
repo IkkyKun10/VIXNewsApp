@@ -3,4 +3,18 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_bookmark">Bookmark</string>
+    <string name="mandiri_news">Mandiri News</string>
+    <string name="berita_terkini">Berita Terkini</string>
+    <string name="image_headline">image headline</string>
+    <string name="cnn_indonesia">CNN Indonesia</string>
+    <string name="_10_jan_2021">10 Jan, 2021</string>
+    <string name="title_example">Title headline, Lorem ipsum adsu djamhf djamsu kfjfgjkf</string>
+    <string name="nama_penulis">Nama penulis</string>
+    <string name="user_penulis">user penulis</string>
+    <string name="date">date</string>
+    <string name="semua_berita">Semua Berita</string>
+    <string name="_404_error_problem">404 Error Problem!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="coba_lagi">Coba Lagi</string>
 </resources>
