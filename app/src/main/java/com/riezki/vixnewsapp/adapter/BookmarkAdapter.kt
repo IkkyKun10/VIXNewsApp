@@ -2,8 +2,6 @@ package com.riezki.vixnewsapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingData
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,23 +12,23 @@ import com.riezki.vixnewsapp.databinding.ListHeadlineItemBinding
 import com.riezki.vixnewsapp.model.response.ArticlesItem
 
 
-class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) : PagingDataAdapter<ArticlesItem, NewsAdapter.NewsViewHolder>(DIFF_CALLBACK) {
+class BookmarkAdapter(private val onItemClick: (ArticlesItem) -> Unit) : ListAdapter<ArticlesItem, BookmarkAdapter.NewsViewHolder>(DIFF_CALLBACK) {
 
-    class NewsViewHolder(private val binding: ListHeadlineItemBinding, val onItemClick: (ArticlesItem) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+    class NewsViewHolder(val binding: ListHeadlineItemBinding, val onItemClick: (ArticlesItem) -> Unit) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(articlesItem: ArticlesItem?) {
+        fun bind(articlesItem: ArticlesItem) {
             with(binding) {
-                imgHealineList.load(articlesItem?.urlToImage){
+                imgHealineList.load(articlesItem.urlToImage){
                     placeholder(R.drawable.ic_download_for_offline)
                     transformations(RoundedCornersTransformation())
                     crossfade(true)
                 }
-                titleHeadline.text = articlesItem?.title
-                namaPenulisId.text = articlesItem?.author
-                tanggalTxt.text = articlesItem?.publishedAt
+                titleHeadline.text = articlesItem.title
+                namaPenulisId.text = articlesItem.author
+                tanggalTxt.text = articlesItem.publishedAt
             }
             itemView.setOnClickListener {
-                articlesItem?.let { it1 -> onItemClick(it1) }
+                onItemClick(articlesItem)
             }
         }
     }

@@ -40,32 +40,6 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <TextView
-        android:id="@+id/error_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/_404_error_problem"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textColor="#E91E63"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:visibility="gone"/>
-
-    <TextView
-        android:id="@+id/btn_try"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:layout_anchor="@id/error_message"
-        app:layout_anchorGravity="bottom|center"
-        android:paddingTop="30dp"
-        android:text="@string/coba_lagi"
-        style="@style/TextAppearance.AppCompat.Button"
-        android:textColor="#E91E63"
-        android:textStyle="bold"
-        android:visibility="gone"/>
-
     <ProgressBar
         android:id="@+id/progressBar"
         style="?attr/progressBarStyle"

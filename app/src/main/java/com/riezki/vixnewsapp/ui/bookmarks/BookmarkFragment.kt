@@ -18,9 +18,6 @@ class BookmarkFragment : Fragment() {
 
     private var _binding: FragmentBookmarkBinding? = null
 
-    lateinit var bookmarkViewModel: BookmarkViewModel
-    private lateinit var newsAdapter: NewsAdapter
-
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -38,36 +35,31 @@ class BookmarkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bookmarkViewModel = (activity as MainActivity).bookmarkViewModel
 
-        newsAdapter = NewsAdapter {
-
-        }
-
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return true
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val article = newsAdapter.currentList[position]
-                bookmarkViewModel.deteleArticle(article)
-                Snackbar.make(view, "Successfully deleted article", Snackbar.LENGTH_LONG).apply {
-                    setAction("Undo") {
-                        bookmarkViewModel.saveNews(article)
-                    }
-                    show()
-                }
-            }
-        }
+//        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+//            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+//            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+//        ) {
+//            override fun onMove(
+//                recyclerView: RecyclerView,
+//                viewHolder: RecyclerView.ViewHolder,
+//                target: RecyclerView.ViewHolder
+//            ): Boolean {
+//                return true
+//            }
+//
+//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                val position = viewHolder.adapterPosition
+//                val article = newsAdapter.currentList[position]
+//                bookmarkViewModel.deteleArticle(article)
+//                Snackbar.make(view, "Successfully deleted article", Snackbar.LENGTH_LONG).apply {
+//                    setAction("Undo") {
+//                        bookmarkViewModel.saveNews(article)
+//                    }
+//                    show()
+//                }
+//            }
+//        }
     }
 
 

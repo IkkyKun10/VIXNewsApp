@@ -17,10 +17,7 @@ import com.riezki.vixnewsapp.utils.ViewModelFactory
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
-    lateinit var homeViewModel: HomeViewModel
-
-    lateinit var bookmarkViewModel: BookmarkViewModel
+    lateinit var navView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val newsRepository = NewsRepository(NewsDatabase.getIntance(this))
-        val viewModelFactory = ViewModelFactory(application, newsRepository)
-        homeViewModel = ViewModelProvider(this, viewModelFactory)[HomeViewModel::class.java]
-        bookmarkViewModel = ViewModelProvider(this, viewModelFactory)[BookmarkViewModel::class.java]
-
-        val navView: BottomNavigationView = binding.navView
+        navView = binding.navView
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
 

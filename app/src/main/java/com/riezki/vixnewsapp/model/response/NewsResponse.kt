@@ -11,7 +11,7 @@ data class NewsResponse(
 	val totalResults: Int? = null,
 
 	@field:SerializedName("articles")
-	val articles: MutableList<ArticlesItem>? = null,
+	val articles: List<ArticlesItem>,
 
 	@field:SerializedName("status")
 	val status: String? = null
