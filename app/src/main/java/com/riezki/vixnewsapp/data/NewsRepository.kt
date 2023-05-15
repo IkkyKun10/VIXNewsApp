@@ -7,9 +7,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
+import com.riezki.vixnewsapp.data.local.entity.NewsEntity
 import com.riezki.vixnewsapp.data.local.room.NewsDatabase
 import com.riezki.vixnewsapp.data.remote.datasource.NewsPagingSource
-import com.riezki.vixnewsapp.data.remote.retrofit.ApiConfig
 import com.riezki.vixnewsapp.data.remote.retrofit.ApiService
 import com.riezki.vixnewsapp.model.response.ArticlesItem
 import com.riezki.vixnewsapp.utils.Resource
@@ -19,7 +19,7 @@ class NewsRepository(private val apiService: ApiService, private val database: N
     fun getHeadlineNews() : LiveData<PagingData<ArticlesItem>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20
+                pageSize = 5
             ),
             pagingSourceFactory = {
                 NewsPagingSource(apiService)
@@ -39,9 +39,19 @@ class NewsRepository(private val apiService: ApiService, private val database: N
         }
     }
 
-    //suspend fun updateInsert(article: ArticlesItem) = database.newsDao().updateInsert(article)
+    suspend fun saveNews(newsEntity: NewsEntity) {
+        database.newsDao().saveNews(newsEntity)
+    }
 
-    //fun getSavedNews() = database.newsDao().getAllArticles()
+    fun getBookmarkedNews(): LiveData<List<NewsEntity>> {
+        return database.newsDao().getAllBookmarked()
+    }
 
-    //suspend fun deleteArticle(article: ArticlesItem) = database.newsDao().deleteArticle(article)
+    suspend fun deleteNews(title: String) {
+        database.newsDao().deleteNews(title)
+    }
+
+    fun isNewsBookmarked(title: String) : LiveData<Boolean> {
+        return database.newsDao().isNewsBookmarked(title)
+    }
 }

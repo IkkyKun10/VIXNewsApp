@@ -7,12 +7,15 @@ import com.riezki.vixnewsapp.model.response.ArticlesItem
 
 @Dao
 interface NewsDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateInsert(article: ArticlesItem): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun saveNews(news: NewsEntity)
 
-    @Query("SELECT * FROM news")
-    fun getAllArticles(): LiveData<List<ArticlesItem>>
+    @Query("SELECT * FROM news_entity")
+    fun getAllBookmarked(): LiveData<List<NewsEntity>>
 
-    @Delete
-    suspend fun deleteArticle(article: ArticlesItem)
+    @Query("DELETE FROM news_entity WHERE title = :newsTitle")
+    suspend fun deleteNews(newsTitle: String)
+
+    @Query("SELECT EXISTS(SELECT * FROM news_entity WHERE title = :title)")
+    fun isNewsBookmarked(title: String): LiveData<Boolean>
 }

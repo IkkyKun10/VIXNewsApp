@@ -1,10 +1,13 @@
 package com.riezki.vixnewsapp.data.local.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "news_entity")
+@Parcelize
 data class NewsEntity(
     @field:ColumnInfo(name = "title")
     @field:PrimaryKey
@@ -21,6 +24,6 @@ data class NewsEntity(
 
     val author: String? = null,
 
-    @field:ColumnInfo(name = "bookmarked")
-    var isBookmarked: Boolean
-)
+//    @field:ColumnInfo(name = "bookmarked")
+//    var isBookmarked: Boolean
+) : Parcelable

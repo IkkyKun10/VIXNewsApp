@@ -8,11 +8,11 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("top-headlines")
+    @GET("everything")
     suspend fun getHeadlineNews(
-        @Query(COUNTRY) countryCode: String = "us",
+        @Query("q") searhIn: String? = "tesla",
         @Query(PAGE) pageNumber: Int = 1,
-        @Query(SIZE) pageSize: Int,
+        @Query(SIZE) pageSize: Int = 5,
         @Query(API_KEYS) apiKey: String = BuildConfig.API_KEY
     ) : NewsResponse
 

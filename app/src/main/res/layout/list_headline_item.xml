@@ -35,20 +35,20 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:scrollHorizontally="true"
-            app:layout_constraintEnd_toStartOf="@id/bookmark"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img_healine_list"
             app:layout_constraintTop_toTopOf="@+id/img_healine_list" />
 
-        <ImageView
-            android:id="@+id/bookmark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/title_bookmark"
-            app:layout_constraintBottom_toBottomOf="@+id/title_headline"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/title_headline"
-            app:layout_constraintTop_toTopOf="@+id/title_headline"
-            app:srcCompat="@drawable/ic_bookmark_border" />
+<!--        <ImageView-->
+<!--            android:id="@+id/bookmark"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:contentDescription="@string/title_bookmark"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/title_headline"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/title_headline"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/title_headline"-->
+<!--            app:srcCompat="@drawable/ic_bookmark_border" />-->
 
         <ImageView
             android:id="@+id/img_user_account"

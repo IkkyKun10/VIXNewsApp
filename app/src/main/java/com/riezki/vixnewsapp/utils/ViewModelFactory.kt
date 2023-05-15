@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.riezki.vixnewsapp.data.NewsRepository
 import com.riezki.vixnewsapp.di.Injection
 import com.riezki.vixnewsapp.ui.bookmarks.BookmarkViewModel
+import com.riezki.vixnewsapp.ui.detail.DetailNewsViewModel
 import com.riezki.vixnewsapp.ui.home.HomeViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -18,6 +19,9 @@ class ViewModelFactory(private val newsRepository: NewsRepository) :
             }
             modelClass.isAssignableFrom(BookmarkViewModel::class.java) -> {
                 BookmarkViewModel(newsRepository) as T
+            }
+            modelClass.isAssignableFrom(DetailNewsViewModel::class.java) -> {
+                DetailNewsViewModel(newsRepository) as T
             }
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }

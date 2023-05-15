@@ -1,18 +1,13 @@
 package com.riezki.vixnewsapp
 
 import android.os.Bundle
-import androidx.activity.viewModels
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.riezki.vixnewsapp.data.NewsRepository
-import com.riezki.vixnewsapp.data.local.room.NewsDatabase
 import com.riezki.vixnewsapp.databinding.ActivityMainBinding
-import com.riezki.vixnewsapp.ui.bookmarks.BookmarkViewModel
-import com.riezki.vixnewsapp.ui.home.HomeViewModel
-import com.riezki.vixnewsapp.utils.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +22,8 @@ class MainActivity : AppCompatActivity() {
 
         navView = binding.navView
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
 
         val navController = navHostFragment.navController
         // Passing each menu ID as a set of Ids because each
@@ -38,5 +34,13 @@ class MainActivity : AppCompatActivity() {
 
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, nd: NavDestination, _ ->
+            if (nd.id == R.id.navigation_home || nd.id == R.id.navigation_bookmark) {
+                navView.visibility = View.VISIBLE
+            } else {
+                navView.visibility = View.GONE
+            }
+        }
     }
 }

@@ -17,11 +17,6 @@ class HomeViewModel(private val repository: NewsRepository) : ViewModel() {
     suspend fun getFirstHeadlineNews(countryCode: String) : LiveData<Resource<List<ArticlesItem>>> =
         repository.getFirstHeadlineNews(countryCode)
 
-//    fun saveNews(articlesItem: ArticlesItem) =
-//        viewModelScope.launch {
-//            repository.updateInsert(articlesItem)
-//        }
-
 
 
 }

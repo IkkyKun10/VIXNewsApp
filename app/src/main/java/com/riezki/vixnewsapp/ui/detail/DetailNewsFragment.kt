@@ -1,18 +1,16 @@
 package com.riezki.vixnewsapp.ui.detail
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.riezki.vixnewsapp.MainActivity
 import com.riezki.vixnewsapp.R
 import com.riezki.vixnewsapp.databinding.FragmentDetailNewsBinding
-import com.riezki.vixnewsapp.model.response.ArticlesItem
-import com.riezki.vixnewsapp.ui.bookmarks.BookmarkViewModel
 import com.riezki.vixnewsapp.utils.ViewModelFactory
 
 class DetailNewsFragment : Fragment() {
@@ -22,7 +20,7 @@ class DetailNewsFragment : Fragment() {
     private var _binding: FragmentDetailNewsBinding? = null
     private val binding get() = _binding!!
 
-    private val bookmarkViewModel: BookmarkViewModel by viewModels {
+    private val detailNewsViewModel: DetailNewsViewModel by viewModels {
         ViewModelFactory.getInstance(requireContext())
     }
 
@@ -38,18 +36,28 @@ class DetailNewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val article = args.articles
+        val article = args.newsEntity
         binding.webView.apply {
             webViewClient = WebViewClient()
-            article.url?.let { loadUrl(it) }
+            article?.url?.let { loadUrl(it) }
         }
 
-        val navView = (activity as MainActivity).navView
+        article?.let { detailNewsViewModel.setNewsData(it) }
 
-        navView.visibility = View.GONE
+        detailNewsViewModel.bookmarkStatus.observe(viewLifecycleOwner) {
+            setBookmarkStatus(it)
+        }
 
         binding.fab.setOnClickListener {
+            article?.let { it1 -> detailNewsViewModel.changeBookmark(it1) }
+        }
+    }
 
+    private fun setBookmarkStatus(state: Boolean) {
+        if (state) {
+            binding.fab.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite))
+        } else {
+            binding.fab.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_border))
         }
     }
 

@@ -1,21 +1,13 @@
 package com.riezki.vixnewsapp.ui.bookmarks
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.riezki.vixnewsapp.data.NewsRepository
+import com.riezki.vixnewsapp.data.local.entity.NewsEntity
 
-class BookmarkViewModel(val repository: NewsRepository) : ViewModel() {
+class BookmarkViewModel(private val repository: NewsRepository) : ViewModel() {
 
-//    fun getSavedNews() : LiveData<List<ArticlesItem>> {
-//        return repository.getSavedNews()
-//    }
-//
-//    fun deteleArticle(articlesItem: ArticlesItem) =
-//        viewModelScope.launch {
-//            repository.deleteArticle(articlesItem)
-//        }
-//
-//    fun saveNews(articlesItem: ArticlesItem) =
-//        viewModelScope.launch {
-//            repository.updateInsert(articlesItem)
-//        }
+    fun getBookmarkedNews() : LiveData<List<NewsEntity>> {
+        return repository.getBookmarkedNews()
+    }
 }

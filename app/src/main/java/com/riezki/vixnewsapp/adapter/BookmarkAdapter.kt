@@ -8,15 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.riezki.vixnewsapp.R
+import com.riezki.vixnewsapp.data.local.entity.NewsEntity
 import com.riezki.vixnewsapp.databinding.ListHeadlineItemBinding
-import com.riezki.vixnewsapp.model.response.ArticlesItem
 
 
-class BookmarkAdapter(private val onItemClick: (ArticlesItem) -> Unit) : ListAdapter<ArticlesItem, BookmarkAdapter.NewsViewHolder>(DIFF_CALLBACK) {
+class BookmarkAdapter(private val onItemClick: (NewsEntity) -> Unit) : ListAdapter<NewsEntity, BookmarkAdapter.NewsViewHolder>(DIFF_CALLBACK) {
 
-    class NewsViewHolder(val binding: ListHeadlineItemBinding, val onItemClick: (ArticlesItem) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+    class NewsViewHolder(private val binding: ListHeadlineItemBinding, val onItemClick: (NewsEntity) -> Unit) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(articlesItem: ArticlesItem) {
+        fun bind(articlesItem: NewsEntity) {
             with(binding) {
                 imgHealineList.load(articlesItem.urlToImage){
                     placeholder(R.drawable.ic_download_for_offline)
@@ -34,12 +34,12 @@ class BookmarkAdapter(private val onItemClick: (ArticlesItem) -> Unit) : ListAda
     }
 
     companion object {
-            private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ArticlesItem>() {
-                override fun areItemsTheSame(oldItem: ArticlesItem, newItem: ArticlesItem): Boolean =
+            private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NewsEntity>() {
+                override fun areItemsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean =
                     oldItem.url == newItem.url
     
     
-                override fun areContentsTheSame(oldItem: ArticlesItem, newItem: ArticlesItem): Boolean =
+                override fun areContentsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean =
                     oldItem == newItem
     
             }

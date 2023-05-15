@@ -9,7 +9,7 @@ import com.riezki.vixnewsapp.data.local.Converters
 import com.riezki.vixnewsapp.data.local.entity.NewsEntity
 import com.riezki.vixnewsapp.model.response.ArticlesItem
 
-@Database(entities = [ArticlesItem::class], version = 1, exportSchema = false)
+@Database(entities = [NewsEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class NewsDatabase : RoomDatabase() {
     abstract fun newsDao() : NewsDao

@@ -19,14 +19,19 @@
         android:id="@+id/navigation_bookmark"
         android:name="com.riezki.vixnewsapp.ui.bookmarks.BookmarkFragment"
         android:label="@string/title_bookmark"
-        tools:layout="@layout/fragment_bookmark" />
+        tools:layout="@layout/fragment_bookmark" >
+        <action
+            android:id="@+id/action_navigation_bookmark_to_detailNewsFragment"
+            app:destination="@id/detailNewsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detailNewsFragment"
         android:name="com.riezki.vixnewsapp.ui.detail.DetailNewsFragment"
         android:label="fragment_detail_news"
         tools:layout="@layout/fragment_detail_news" >
         <argument
-            android:name="articles"
-            app:argType="com.riezki.vixnewsapp.model.response.ArticlesItem" />
+            android:name="newsEntity"
+            app:argType="com.riezki.vixnewsapp.data.local.entity.NewsEntity"
+            app:nullable="true" />
     </fragment>
 </navigation>
