@@ -1,6 +1,7 @@
 package com.riezki.vixnewsapp.adapter
 
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.ViewGroup
 import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import coil.transform.Transformation
 import com.riezki.vixnewsapp.R
 import com.riezki.vixnewsapp.databinding.ListHeadlineItemBinding
 import com.riezki.vixnewsapp.model.response.ArticlesItem
@@ -22,7 +24,7 @@ class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) : PagingDataA
             with(binding) {
                 imgHealineList.load(articlesItem?.urlToImage){
                     placeholder(R.drawable.ic_download_for_offline)
-                    transformations(RoundedCornersTransformation())
+                    transformations(RoundedCornersTransformation(topRight = 16f, bottomRight = 16f))
                     crossfade(true)
                 }
                 titleHeadline.text = articlesItem?.title

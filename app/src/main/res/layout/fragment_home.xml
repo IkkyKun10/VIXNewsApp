@@ -20,6 +20,12 @@
                 android:id="@+id/headline_item_first"
                 layout="@layout/headline_layout"/>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/rv_everything_headline"
+                tools:listitem="@layout/item_everything_headline"/>
 
             <TextView
                 android:layout_width="match_parent"

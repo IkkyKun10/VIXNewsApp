@@ -3,6 +3,7 @@ package com.riezki.vixnewsapp.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.lifecycle.map
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -27,7 +28,7 @@ class NewsRepository(private val apiService: ApiService, private val database: N
         ).liveData
     }
 
-    suspend fun getFirstHeadlineNews(countryCode: String) : LiveData<Resource<List<ArticlesItem>>> = liveData {
+    fun getFirstHeadlineNews(countryCode: String) : LiveData<Resource<List<ArticlesItem>>> = liveData {
         emit(Resource.Loading(null))
         try {
             val response = apiService.getFirstHealineNews(countryCode)

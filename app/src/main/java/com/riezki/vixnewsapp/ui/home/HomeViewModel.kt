@@ -14,9 +14,7 @@ class HomeViewModel(private val repository: NewsRepository) : ViewModel() {
     val headlineNewsData : LiveData<PagingData<ArticlesItem>> =
         repository.getHeadlineNews().cachedIn(viewModelScope)
 
-    suspend fun getFirstHeadlineNews(countryCode: String) : LiveData<Resource<List<ArticlesItem>>> =
+    fun getFirstHeadlineNews(countryCode: String) : LiveData<Resource<List<ArticlesItem>>> =
         repository.getFirstHeadlineNews(countryCode)
-
-
 
 }
