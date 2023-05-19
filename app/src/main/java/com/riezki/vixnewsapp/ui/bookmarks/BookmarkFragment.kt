@@ -53,34 +53,37 @@ class BookmarkFragment : Fragment() {
             view.findNavController().navigate(action)
         }
         showRecyler()
-//        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
-//            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-//            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-//        ) {
-//            override fun onMove(
-//                recyclerView: RecyclerView,
-//                viewHolder: RecyclerView.ViewHolder,
-//                target: RecyclerView.ViewHolder
-//            ): Boolean {
-//                return true
-//            }
-//
-//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                val position = viewHolder.adapterPosition
-//                val article = bookmarkAdapter.currentList[position]
-//                bookmarkViewModel.deteleArticle(article)
-//                Snackbar.make(view, "Successfully deleted article", Snackbar.LENGTH_LONG).apply {
-//                    setAction("Undo") {
-//                        bookmarkViewModel.saveNews(article)
-//                    }
-//                    show()
-//                }
-//            }
-//        }
+
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val article = bookmarkAdapter.currentList[position]
+                bookmarkViewModel.deleteNews(article)
+                Snackbar.make(view, "Successfully deleted article", Snackbar.LENGTH_LONG).apply {
+                    setAction("Undo") {
+                        bookmarkViewModel.saveNews(article)
+                    }
+                    show()
+                }
+            }
+        }
 
         bookmarkViewModel.getBookmarkedNews().observe(viewLifecycleOwner) {response ->
             bookmarkAdapter.submitList(response)
         }
+
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.rvHeadline)
     }
 
     private fun showRecyler() {

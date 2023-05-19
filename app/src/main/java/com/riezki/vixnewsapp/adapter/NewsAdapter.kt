@@ -1,28 +1,34 @@
 package com.riezki.vixnewsapp.adapter
 
 import android.view.LayoutInflater
-import android.view.RoundedCorner
 import android.view.ViewGroup
-import androidx.paging.PagingData
+import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import coil.transform.Transformation
 import com.riezki.vixnewsapp.R
+import com.riezki.vixnewsapp.data.local.entity.NewsEntity
 import com.riezki.vixnewsapp.databinding.ListHeadlineItemBinding
 import com.riezki.vixnewsapp.model.response.ArticlesItem
 
 
-class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) : PagingDataAdapter<ArticlesItem, NewsAdapter.NewsViewHolder>(DIFF_CALLBACK) {
+class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) :
+    PagingDataAdapter<ArticlesItem, NewsAdapter.NewsViewHolder>(DIFF_CALLBACK) {
 
-    class NewsViewHolder(private val binding: ListHeadlineItemBinding, val onItemClick: (ArticlesItem) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+    private var itemClickListener: ItemOnClickListener? = null
+
+    fun setOnClickItemListener(itemOnClickLister: ItemOnClickListener) {
+        this.itemClickListener = itemOnClickLister
+    }
+
+    class NewsViewHolder(val binding: ListHeadlineItemBinding, val onItemClick: (ArticlesItem) -> Unit) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(articlesItem: ArticlesItem?) {
             with(binding) {
-                imgHealineList.load(articlesItem?.urlToImage){
+                imgHealineList.load(articlesItem?.urlToImage) {
                     placeholder(R.drawable.ic_download_for_offline)
                     transformations(RoundedCornersTransformation(topRight = 16f, bottomRight = 16f))
                     crossfade(true)
@@ -38,16 +44,16 @@ class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) : PagingDataA
     }
 
     companion object {
-            private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ArticlesItem>() {
-                override fun areItemsTheSame(oldItem: ArticlesItem, newItem: ArticlesItem): Boolean =
-                    oldItem.url == newItem.url
-    
-    
-                override fun areContentsTheSame(oldItem: ArticlesItem, newItem: ArticlesItem): Boolean =
-                    oldItem == newItem
-    
-            }
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ArticlesItem>() {
+            override fun areItemsTheSame(oldItem: ArticlesItem, newItem: ArticlesItem): Boolean =
+                oldItem.url == newItem.url
+
+
+            override fun areContentsTheSame(oldItem: ArticlesItem, newItem: ArticlesItem): Boolean =
+                oldItem == newItem
+
         }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val view = ListHeadlineItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -57,6 +63,15 @@ class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) : PagingDataA
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val items = getItem(position)
         holder.bind(items)
+
+        val ivBookmark = holder.binding.bookmark
+        ivBookmark.setOnClickListener {
+            itemClickListener?.onBookmarkClick(items)
+        }
+    }
+
+    interface ItemOnClickListener {
+        fun onBookmarkClick(articlesItem: ArticlesItem?)
     }
 
 }
