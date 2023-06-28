@@ -11,11 +11,10 @@ import coil.transform.RoundedCornersTransformation
 import com.riezki.vixnewsapp.R
 import com.riezki.vixnewsapp.data.local.entity.NewsEntity
 import com.riezki.vixnewsapp.databinding.ListHeadlineItemBinding
-import com.riezki.vixnewsapp.model.response.ArticlesItem
 
 
-class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) :
-    PagingDataAdapter<ArticlesItem, NewsAdapter.NewsViewHolder>(DIFF_CALLBACK) {
+class NewsAdapter(private val onItemClick: (NewsEntity) -> Unit) :
+    PagingDataAdapter<NewsEntity, NewsAdapter.NewsViewHolder>(DIFF_CALLBACK) {
 
     private var itemClickListener: ItemOnClickListener? = null
 
@@ -23,10 +22,10 @@ class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) :
         this.itemClickListener = itemOnClickLister
     }
 
-    class NewsViewHolder(val binding: ListHeadlineItemBinding, val onItemClick: (ArticlesItem) -> Unit) :
+    class NewsViewHolder(val binding: ListHeadlineItemBinding, val onItemClick: (NewsEntity) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(articlesItem: ArticlesItem?) {
+        fun bind(articlesItem: NewsEntity?) {
             with(binding) {
                 imgHealineList.load(articlesItem?.urlToImage) {
                     placeholder(R.drawable.ic_download_for_offline)
@@ -36,6 +35,12 @@ class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) :
                 titleHeadline.text = articlesItem?.title
                 namaPenulisId.text = articlesItem?.author
                 tanggalTxt.text = articlesItem?.publishedAt
+
+//                if (articlesItem?.isBookmarked == true) {
+//                    binding.bookmark.setImageDrawable(ContextCompat.getDrawable(binding.bookmark.context, R.drawable.ic_bookmark))
+//                } else {
+//                    binding.bookmark.setImageDrawable(ContextCompat.getDrawable(binding.bookmark.context, R.drawable.ic_bookmark_border))
+//                }
             }
             itemView.setOnClickListener {
                 articlesItem?.let { it1 -> onItemClick(it1) }
@@ -44,12 +49,12 @@ class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) :
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ArticlesItem>() {
-            override fun areItemsTheSame(oldItem: ArticlesItem, newItem: ArticlesItem): Boolean =
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NewsEntity>() {
+            override fun areItemsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean =
                 oldItem.url == newItem.url
 
 
-            override fun areContentsTheSame(oldItem: ArticlesItem, newItem: ArticlesItem): Boolean =
+            override fun areContentsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean =
                 oldItem == newItem
 
         }
@@ -68,10 +73,16 @@ class NewsAdapter(private val onItemClick: (ArticlesItem) -> Unit) :
         ivBookmark.setOnClickListener {
             itemClickListener?.onBookmarkClick(items)
         }
+
+        if (items?.isBookmarked == true) {
+            ivBookmark.setImageDrawable(ContextCompat.getDrawable(ivBookmark.context, R.drawable.ic_bookmark))
+        } else {
+            ivBookmark.setImageDrawable(ContextCompat.getDrawable(ivBookmark.context, R.drawable.ic_bookmark_border))
+        }
     }
 
     interface ItemOnClickListener {
-        fun onBookmarkClick(articlesItem: ArticlesItem?)
+        fun onBookmarkClick(newsEntity: NewsEntity?)
     }
 
 }

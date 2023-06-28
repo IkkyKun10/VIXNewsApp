@@ -17,17 +17,17 @@ class HomeViewModel(private val repository: NewsRepository) : ViewModel() {
 
     private val news = MutableLiveData<NewsEntity>()
 
-    val headlineNewsData : LiveData<PagingData<ArticlesItem>> =
+    val headlineNewsData : LiveData<PagingData<NewsEntity>> =
         repository.getHeadlineNews().cachedIn(viewModelScope)
 
-    fun getFirstHeadlineNews(countryCode: String) : LiveData<Resource<List<ArticlesItem>>> =
+    fun getFirstTopHeadlineNews(countryCode: String) : LiveData<Resource<List<ArticlesItem>>> =
         repository.getFirstHeadlineNews(countryCode)
 
     fun setCheckingData(newsEntity: NewsEntity) {
         news.value = newsEntity
     }
 
-    val bookmarkStatus: LiveData<Boolean> = news.switchMap {
+    private val bookmarkStatus: LiveData<Boolean> = news.switchMap {
         repository.isNewsBookmarked(it.title)
     }
 
@@ -38,6 +38,18 @@ class HomeViewModel(private val repository: NewsRepository) : ViewModel() {
             } else {
                 repository.saveNews(newsEntity)
             }
+        }
+    }
+
+    fun saveNews(newsEntity: NewsEntity) {
+        viewModelScope.launch {
+            repository.updateInPaging(newsEntity, true)
+        }
+    }
+
+    fun deleteNews(newsEntity: NewsEntity) {
+        viewModelScope.launch {
+            repository.updateInPaging(newsEntity, false)
         }
     }
 }

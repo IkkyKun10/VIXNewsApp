@@ -7,22 +7,29 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.riezki.vixnewsapp.data.local.Converters
 import com.riezki.vixnewsapp.data.local.entity.NewsEntity
-import com.riezki.vixnewsapp.model.response.ArticlesItem
 
-@Database(entities = [NewsEntity::class], version = 1, exportSchema = false)
+@Database(entities = [NewsEntity::class, RemoteKeys::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class NewsDatabase : RoomDatabase() {
     abstract fun newsDao() : NewsDao
+    abstract fun remoteKeysDao() : RemoteKeyDao
 
     companion object {
         @Volatile
         private var instance: NewsDatabase? = null
+
+        @JvmStatic
         fun getIntance(context: Context) : NewsDatabase {
             return instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     NewsDatabase::class.java, "News.db"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also {
+                        instance = it
+                    }
             }
         }
     }

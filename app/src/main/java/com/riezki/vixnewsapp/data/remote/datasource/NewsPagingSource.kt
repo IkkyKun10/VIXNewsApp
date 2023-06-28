@@ -3,11 +3,12 @@ package com.riezki.vixnewsapp.data.remote.datasource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.riezki.vixnewsapp.data.local.entity.NewsEntity
+import com.riezki.vixnewsapp.data.local.room.NewsDatabase
 import com.riezki.vixnewsapp.data.remote.retrofit.ApiService
 import com.riezki.vixnewsapp.model.response.ArticlesItem
 import retrofit2.HttpException
 
-class NewsPagingSource(private val apiService: ApiService) : PagingSource<Int, ArticlesItem>() {
+class NewsPagingSource(private val apiService: ApiService, private val database: NewsDatabase) : PagingSource<Int, ArticlesItem>() {
 
     private companion object {
         const val INITIAL_PAGE_INDEX = 1
@@ -24,13 +25,16 @@ class NewsPagingSource(private val apiService: ApiService) : PagingSource<Int, A
         return try {
             val position = params.key ?: INITIAL_PAGE_INDEX
             val responseData = apiService.getHeadlineNews(pageNumber = position, pageSize = params.loadSize)
+
             val newResult = responseData.articles.map {
+                val isBookmarked = database.newsDao().isBookmarkedInList(it.title.toString())
                 NewsEntity(
                     title = it.title.toString(),
                     publishedAt = it.publishedAt.toString(),
                     urlToImage = it.urlToImage,
                     url = it.url,
                     author = it.author,
+                    isBookmarked = isBookmarked,
                 )
             }
 

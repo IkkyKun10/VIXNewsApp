@@ -11,8 +11,8 @@ import com.riezki.vixnewsapp.R
 import com.riezki.vixnewsapp.databinding.ItemEverythingHeadlineBinding
 import com.riezki.vixnewsapp.model.response.ArticlesItem
 
-class ItemEverythingHeadlineAdapter(private val onClick: (ArticlesItem) -> Unit)
-    : ListAdapter<ArticlesItem, ItemEverythingHeadlineAdapter.ItemEverythingViewHolder>
+class ItemFirstTopHeadlineAdapter(private val onClick: (ArticlesItem) -> Unit)
+    : ListAdapter<ArticlesItem, ItemFirstTopHeadlineAdapter.ItemEverythingViewHolder>
     (DIFF_CALLBACK) {
 
     companion object {

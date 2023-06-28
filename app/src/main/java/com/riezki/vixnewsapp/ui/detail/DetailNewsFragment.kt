@@ -49,7 +49,9 @@ class DetailNewsFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            article?.let { it1 -> detailNewsViewModel.changeBookmark(it1) }
+            article?.let { item ->
+                detailNewsViewModel.changeBookmark(item)
+            }
         }
     }
 

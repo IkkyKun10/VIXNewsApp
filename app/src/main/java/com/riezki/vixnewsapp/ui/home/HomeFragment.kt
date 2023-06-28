@@ -9,12 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.riezki.vixnewsapp.adapter.ItemEverythingHeadlineAdapter
+import com.riezki.vixnewsapp.adapter.ItemFirstTopHeadlineAdapter
 import com.riezki.vixnewsapp.adapter.ItemLoadingStateAdapter
 import com.riezki.vixnewsapp.adapter.NewsAdapter
 import com.riezki.vixnewsapp.data.local.entity.NewsEntity
 import com.riezki.vixnewsapp.databinding.FragmentHomeBinding
-import com.riezki.vixnewsapp.model.response.ArticlesItem
 import com.riezki.vixnewsapp.utils.Resource
 import com.riezki.vixnewsapp.utils.ViewModelFactory
 
@@ -25,13 +24,13 @@ class HomeFragment : Fragment() {
         ViewModelFactory.getInstance(requireContext())
     }
 
-    private lateinit var topHeadlineAdapter: ItemEverythingHeadlineAdapter
+    private lateinit var topHeadlineAdapter: ItemFirstTopHeadlineAdapter
 
     private var _binding: FragmentHomeBinding? = null
 
     private val binding get() = _binding!!
 
-    var isLoading = false
+    private var isLoading = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +45,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        topHeadlineAdapter = ItemEverythingHeadlineAdapter {item ->
+        topHeadlineAdapter = ItemFirstTopHeadlineAdapter { item ->
             val newItem = NewsEntity(
                 title = item.title.toString(),
                 publishedAt = item.publishedAt.toString(),
@@ -61,41 +60,26 @@ class HomeFragment : Fragment() {
 
         showRvHeadlineItemFirst()
 
-        newsAdapter = NewsAdapter { item ->
-            val newItem = NewsEntity(
-                title = item.title.toString(),
-                publishedAt = item.publishedAt.toString(),
-                urlToImage = item.urlToImage,
-                url = item.url,
-                author = item.author
-            )
-            val action = HomeFragmentDirections.actionNavigationHomeToDetailNewsFragment(newItem)
+        newsAdapter = NewsAdapter { news ->
+            val action = HomeFragmentDirections.actionNavigationHomeToDetailNewsFragment(news)
             view.findNavController().navigate(action)
         }
 
-
-
         onRecyclerView(view)
 
-        getHeadlineNews()
+        getHeadlineTeslaNews()
 
-        getFirstHeadlineNews(view)
-
-        homeViewModel.bookmarkStatus.observe(viewLifecycleOwner) {
-
-        }
+        getFirstTopHeadlineNews(view)
 
         newsAdapter.setOnClickItemListener(object : NewsAdapter.ItemOnClickListener {
-            override fun onBookmarkClick(articlesItem: ArticlesItem?) {
-                val newsEntity = NewsEntity(
-                    title = articlesItem?.title.toString(),
-                    publishedAt = articlesItem?.publishedAt.toString(),
-                    urlToImage = articlesItem?.urlToImage,
-                    url = articlesItem?.url,
-                    author = articlesItem?.author
-                )
-                homeViewModel.changeBookmark(newsEntity)
-                Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+            override fun onBookmarkClick(newsEntity: NewsEntity?) {
+                if (newsEntity?.isBookmarked == true) {
+                    homeViewModel.deleteNews(newsEntity)
+                    Toast.makeText(context, "Removed", Toast.LENGTH_SHORT).show()
+                } else {
+                    newsEntity?.let { homeViewModel.saveNews(it) }
+                    Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                }
             }
 
         })
@@ -110,17 +94,16 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getHeadlineNews() {
+    private fun getHeadlineTeslaNews() {
         showProgressBar()
         homeViewModel.headlineNewsData.observe(viewLifecycleOwner) { response ->
             hideProgressBar()
             newsAdapter.submitData(lifecycle, response)
-            //showHeadlineItemFirst(newsAdapter.snapshot().items)
             val list = newsAdapter.snapshot().items
             list.map {
                 val newsForCheckingBookmark = NewsEntity(
-                    title = it.title.toString(),
-                    publishedAt = it.publishedAt.toString(),
+                    title = it.title,
+                    publishedAt = it.publishedAt,
                     urlToImage = it.urlToImage,
                     url = it.url,
                     author = it.author
@@ -130,8 +113,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getFirstHeadlineNews(view: View) {
-        homeViewModel.getFirstHeadlineNews("us").observe(viewLifecycleOwner) { response ->
+    private fun getFirstTopHeadlineNews(view: View) {
+        homeViewModel.getFirstTopHeadlineNews("us").observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {
                     showProgressBar()
