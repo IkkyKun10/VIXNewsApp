@@ -1,5 +1,6 @@
 package com.riezki.vixnewsapp.data.remote.datasource
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -11,10 +12,13 @@ import com.riezki.vixnewsapp.data.local.room.RemoteKeys
 import com.riezki.vixnewsapp.data.remote.retrofit.ApiService
 
 @OptIn(ExperimentalPagingApi::class)
-class NewsRemoteMediator(private val apiService: ApiService, private val database: NewsDatabase) : RemoteMediator<Int, NewsEntity>() {
+class NewsRemoteMediator(
+    private val apiService: ApiService,
+    private val database: NewsDatabase
+) : RemoteMediator<Int, NewsEntity>() {
     //WARNINGGG!!!
     //change class newsEntitiy to ArticleItems
-    private companion object {
+    companion object {
         const val INITIAL_PAGE_INDEX = 1
     }
 
@@ -30,21 +34,23 @@ class NewsRemoteMediator(private val apiService: ApiService, private val databas
                 remoteKeys?.nextKey?.minus(1) ?: INITIAL_PAGE_INDEX
             }
 
-            LoadType.APPEND -> {
-                val remoteKeys = getRemoteKeyForLastItem(state)
-                val nextKey = remoteKeys?.nextKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
-                nextKey
-            }
-
             LoadType.PREPEND -> {
                 val remoteKeys = getRemoteKeyForFirstItem(state)
-                val prevKey = remoteKeys?.prevKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
-                prevKey
+                val prevKeys = remoteKeys?.prevKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                prevKeys
+            }
+
+            LoadType.APPEND -> {
+                val remoteKeys = getRemoteKeyForLastItem(state)
+                val nextKeys = remoteKeys?.nextKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                nextKeys
             }
         }
 
         try {
-            val responseData = apiService.getHeadlineNews(pageSize = state.config.pageSize)
+            val responseData = apiService.getHeadlineNews(pageNumber = page, pageSize = state.config.pageSize)
             val endOfPaginationReached = responseData.articles.isEmpty()
 
             database.withTransaction {
@@ -58,22 +64,22 @@ class NewsRemoteMediator(private val apiService: ApiService, private val databas
 
                 val keys = responseData.articles.map {
                     RemoteKeys(
-                        id = it.id!!,
-                        prevKey = prevKey!!,
-                        nextKey = nextKey!!
+                        id = it.id,
+                        prevKey = prevKey,
+                        nextKey = nextKey,
                     )
                 }
 
                 val newData = responseData.articles.map {
-                    val isNewsBookmarked = database.newsDao().isBookmarkedInList(it.title.toString())
+                    //val isNewsBookmarked = database.newsDao().isBookmarkedInList(it.title.toString())
                     NewsEntity(
-                        title = it.title.toString(),
-                        urlToImage = it.urlToImage.toString(),
-                        publishedAt = it.publishedAt.toString(),
+                        title = it.title,
+                        urlToImage = it.urlToImage,
+                        publishedAt = it.publishedAt,
                         id = it.id,
                         url = it.url,
                         author = it.author,
-                        isBookmarked = isNewsBookmarked,
+                        //isBookmarked = isNewsBookmarked,
                     )
                 }
 
@@ -84,17 +90,21 @@ class NewsRemoteMediator(private val apiService: ApiService, private val databas
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
 
         } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("StoryRemoteMediator", "load: ${e.message.toString()} ")
             return MediatorResult.Error(e)
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, NewsEntity>) : RemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, NewsEntity>): RemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
-            database.remoteKeysDao().getRemoteKeyId(data.id!!)
+            data.id?.let {
+                database.remoteKeysDao().getRemoteKeyId(it)
+            }
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, NewsEntity>) : RemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, NewsEntity>): RemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
             data.id?.let { id ->
                 database.remoteKeysDao().getRemoteKeyId(id)
@@ -102,7 +112,7 @@ class NewsRemoteMediator(private val apiService: ApiService, private val databas
         }
     }
 
-    private suspend fun getRemoteKeysClosestToCurrentPosition(state: PagingState<Int, NewsEntity>) : RemoteKeys? {
+    private suspend fun getRemoteKeysClosestToCurrentPosition(state: PagingState<Int, NewsEntity>): RemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
                 database.remoteKeysDao().getRemoteKeyId(id)

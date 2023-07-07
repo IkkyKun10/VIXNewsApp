@@ -7,8 +7,8 @@ import com.riezki.vixnewsapp.data.remote.retrofit.ApiConfig
 
 object Injection {
     fun provideRepository(context: Context): NewsRepository {
-        val apiService = ApiConfig.apiService()
+        val apiService = ApiConfig.apiService(context)
         val database = NewsDatabase.getIntance(context)
-        return NewsRepository(apiService, database)
+        return NewsRepository.getInstance(apiService, database)
     }
 }

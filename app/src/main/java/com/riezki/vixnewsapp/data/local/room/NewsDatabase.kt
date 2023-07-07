@@ -18,14 +18,13 @@ abstract class NewsDatabase : RoomDatabase() {
         @Volatile
         private var instance: NewsDatabase? = null
 
-        @JvmStatic
+        //@JvmStatic
         fun getIntance(context: Context) : NewsDatabase {
             return instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     NewsDatabase::class.java, "News.db"
                 )
-                    .fallbackToDestructiveMigration()
                     .build()
                     .also {
                         instance = it

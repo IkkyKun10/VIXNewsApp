@@ -18,13 +18,13 @@ class DetailNewsViewModel(private val repository: NewsRepository) : ViewModel() 
     }
 
     val bookmarkStatus: LiveData<Boolean> = newsData.switchMap {
-        repository.isNewsBookmarked(it.title)
+        it.title?.let { it1 -> repository.isNewsBookmarked(it1) }
     }
 
     fun changeBookmark(newsDetail: NewsEntity) {
         viewModelScope.launch {
             if (bookmarkStatus.value as Boolean) {
-                repository.deleteNews(newsDetail.title)
+                newsDetail.title?.let { repository.deleteNews(it) }
             } else {
                 repository.saveNews(newsDetail)
             }

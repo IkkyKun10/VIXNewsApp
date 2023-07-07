@@ -97,7 +97,10 @@ dependencies {
     //lottie
     implementation 'com.airbnb.android:lottie:5.2.0'
 
-
+    //chucker
+    debugImplementation "com.github.chuckerteam.chucker:library:3.5.2"
+    releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.5.2"
+    
     //image_animation
     implementation "com.flaviofaria:kenburnsview:$ken_burns_version"
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"

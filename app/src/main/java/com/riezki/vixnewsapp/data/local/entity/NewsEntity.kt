@@ -15,10 +15,10 @@ data class NewsEntity(
     val id: Int? = null,
 
     @field:ColumnInfo(name = "title")
-    val title: String,
+    val title: String? = null,
 
     @field:ColumnInfo(name = "publishedAt")
-    val publishedAt: String,
+    val publishedAt: String? = null,
 
     @field:ColumnInfo(name = "urlToImage")
     val urlToImage: String? = null,

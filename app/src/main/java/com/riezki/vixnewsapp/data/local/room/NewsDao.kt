@@ -28,7 +28,7 @@ interface NewsDao {
     @Update
     suspend fun updateNewsInPaging(newsEntity: NewsEntity)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllToLocal(news: List<NewsEntity>)
 
     @Query("SELECT * FROM news_entity")

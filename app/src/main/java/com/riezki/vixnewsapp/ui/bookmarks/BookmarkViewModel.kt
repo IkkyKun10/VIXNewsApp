@@ -17,9 +17,9 @@ class BookmarkViewModel(private val repository: NewsRepository) : ViewModel() {
         }
     }
 
-    fun deleteNews(newsEntity: NewsEntity) {
+    fun deleteNews(newsEntity: NewsEntity?) {
         viewModelScope.launch {
-            repository.deleteNews(newsEntity.title)
+            newsEntity?.title?.let { repository.deleteNews(it) }
         }
     }
 

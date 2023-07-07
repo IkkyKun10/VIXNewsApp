@@ -22,10 +22,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <Button
+    <ImageButton
         android:id="@+id/retry_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/coba_lagi" />
+        android:text="@string/retry"
+        android:backgroundTint="@android:color/transparent"
+        android:contentDescription="@string/retry"
+        android:src="@drawable/ic_refresh"/>
 </LinearLayout>

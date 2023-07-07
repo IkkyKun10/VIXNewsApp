@@ -29,7 +29,8 @@ class NewsAdapter(private val onItemClick: (NewsEntity) -> Unit) :
             with(binding) {
                 imgHealineList.load(articlesItem?.urlToImage) {
                     placeholder(R.drawable.ic_download_for_offline)
-                    transformations(RoundedCornersTransformation(topRight = 16f, bottomRight = 16f))
+                    //transformations(RoundedCornersTransformation(topRight = 16f, bottomRight = 16f))
+                    error((R.drawable.ic_error))
                     crossfade(true)
                 }
                 titleHeadline.text = articlesItem?.title
@@ -51,7 +52,7 @@ class NewsAdapter(private val onItemClick: (NewsEntity) -> Unit) :
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NewsEntity>() {
             override fun areItemsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean =
-                oldItem.url == newItem.url
+                oldItem.title == newItem.title
 
 
             override fun areContentsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean =
@@ -69,16 +70,16 @@ class NewsAdapter(private val onItemClick: (NewsEntity) -> Unit) :
         val items = getItem(position)
         holder.bind(items)
 
-        val ivBookmark = holder.binding.bookmark
-        ivBookmark.setOnClickListener {
-            itemClickListener?.onBookmarkClick(items)
-        }
-
-        if (items?.isBookmarked == true) {
-            ivBookmark.setImageDrawable(ContextCompat.getDrawable(ivBookmark.context, R.drawable.ic_bookmark))
-        } else {
-            ivBookmark.setImageDrawable(ContextCompat.getDrawable(ivBookmark.context, R.drawable.ic_bookmark_border))
-        }
+//        val ivBookmark = holder.binding.bookmark
+//        ivBookmark.setOnClickListener {
+//            itemClickListener?.onBookmarkClick(items)
+//        }
+//
+//        if (items?.isBookmarked == true) {
+//            ivBookmark.setImageDrawable(ContextCompat.getDrawable(ivBookmark.context, R.drawable.ic_bookmark))
+//        } else {
+//            ivBookmark.setImageDrawable(ContextCompat.getDrawable(ivBookmark.context, R.drawable.ic_bookmark_border))
+//        }
     }
 
     interface ItemOnClickListener {

@@ -17,8 +17,8 @@ import com.riezki.vixnewsapp.utils.Resource
 
 class NewsRepository(private val apiService: ApiService, private val database: NewsDatabase) {
 
-    @OptIn(ExperimentalPagingApi::class)
     fun getHeadlineNews() : LiveData<PagingData<NewsEntity>> {
+        @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 5
@@ -26,7 +26,7 @@ class NewsRepository(private val apiService: ApiService, private val database: N
             remoteMediator = NewsRemoteMediator(apiService, database),
             pagingSourceFactory = {
                 database.newsDao().getAllNews()
-            }
+            },
         ).liveData
     }
 
@@ -62,5 +62,16 @@ class NewsRepository(private val apiService: ApiService, private val database: N
 
     fun isNewsBookmarked(title: String) : LiveData<Boolean> {
         return database.newsDao().isNewsBookmarked(title)
+    }
+
+    companion object {
+        @Volatile
+        private var instance: NewsRepository? = null
+
+        fun getInstance(apiService: ApiService, database: NewsDatabase): NewsRepository {
+            return instance ?: synchronized(this) {
+                instance ?: NewsRepository(apiService, database)
+            }.also { instance = it }
+        }
     }
 }
